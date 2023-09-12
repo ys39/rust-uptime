@@ -535,6 +535,7 @@ dependencies = [
  "libc",
  "nix",
  "predicates",
+ "regex",
 ]
 
 [[package]]
