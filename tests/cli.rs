@@ -71,8 +71,8 @@ fn long_pretty_argument() -> Result<()> {
 
     cmd.arg("--pretty");
     let re = Regex::new(r"up \d+ hours?, \d+ minutes")?;
-    let output = cmd.output().unwrap();
-    let stdout = str::from_utf8(&output.stdout).unwrap();
+    let output = cmd.output()?;
+    let stdout = str::from_utf8(&output.stdout)?;
     assert!(re.is_match(stdout));
     Ok(())
 }
@@ -83,8 +83,21 @@ fn long_since_argument() -> Result<()> {
 
     cmd.arg("--since");
     let re = Regex::new(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}")?;
-    let output = cmd.output().unwrap();
-    let stdout = str::from_utf8(&output.stdout).unwrap();
+    let output = cmd.output()?;
+    let stdout = str::from_utf8(&output.stdout)?;
+    assert!(re.is_match(stdout));
+    Ok(())
+}
+
+#[test]
+fn no_argument() -> Result<()> {
+    let mut cmd = Command::cargo_bin("rust-uptime")?;
+
+    let re = Regex::new(
+        r" \d{2}:\d{2}:\d{2} up  \d{1,2}:\d{2},  \d{1,4} user, load average: \d{1,2}.\d{2}, \d{1,2}.\d{2}, \d{1,2}.\d{2}",
+    )?;
+    let output = cmd.output()?;
+    let stdout = str::from_utf8(&output.stdout)?;
     assert!(re.is_match(stdout));
     Ok(())
 }
